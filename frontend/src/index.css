@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+body{
+    background: url(../public/bgh.jpeg);
+    background-size: cover;
+    background-position: center;
+    /* height: max-content; */
+    /* width: max-content; */
+
+}

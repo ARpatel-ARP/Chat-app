@@ -51,7 +51,7 @@ export const login = async (req, res) => {
             })
         }
         const user = await User.findOne({userName})
-        if (!user ) {
+        if (!user) {
             return res.status(400).json({
                 message:"Invalid credentials",
                 success:false
@@ -97,11 +97,12 @@ export const logout = async (req, res) => {
 
 export const getOtherUsers = async (req, res) => {
     try {
-        
+        const loggedInUserId = req.id
+        const otherUsers = await User.find({_id:{$ne:loggedInUserId}}).select("-password")
+        return res.status(200).json(otherUsers)
     } catch (error) {
-        
+        console.log(error);
     }
-  
 }
 
   
