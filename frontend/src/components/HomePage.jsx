@@ -1,7 +1,6 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import MessageContainer from './MessageContainer';
-import OtherUsers from './OtherUsers';
 
 const HomePage = () => {
   return (
