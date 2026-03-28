@@ -29,6 +29,7 @@ const Login = () => {
       if (res.data) {
         dispatch(setAuthUser(res.data));
         toast.success("Login successful!");
+        console.log("res.data:", res.data);
         setUser({ userName: "", password: "" });
         navigate("/");
       }

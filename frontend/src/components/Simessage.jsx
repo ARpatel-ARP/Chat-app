@@ -1,42 +1,38 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 
 const Simessage = ({ message }) => {
-  const {selectedUser} = useSelector(store=>store.user)
+  const scroll = useRef();
+  const { authUser, selectedUser } = useSelector((store) => store.user);
+
+  useEffect(() => {
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+  }, [message]);
+
+  const isSender = message?.senderId?.toString() === authUser?._id?.toString(); // ✅
+  console.log("senderId:", message?.senderId);
+console.log("authUser._id:", authUser?._id);
+console.log("isSender:", isSender);
+
   return (
-    <>
-      <div className="chat chat-start">
-        <div className="chat-image avatar">
-          <div className="w-10 rounded-full">
-            <img
-              alt="Tailwind CSS chat bubble component"
-              src={selectedUser?.profilePhoto}
-            />
-          </div>
+    <div
+      ref={scroll}
+      className={`chat ${isSender ? "chat-end" : "chat-start"}`}
+    >
+      <div className="chat-image avatar">
+        <div className="w-10 rounded-full">
+          <img
+            alt="profile"
+            src={isSender ? authUser?.profilePhoto : selectedUser?.profilePhoto} // ✅ correct photo
+          />
         </div>
-        <div className="chat-header">
-          {selectedUser?.fullName}
-          <time className="text-xs opacity-50">12:45</time>
-        </div>
-        <div className="chat-bubble"></div>
       </div>
-      <div className="chat chat-end">
-        <div className="chat-image avatar">
-          <div className="w-10 rounded-full">
-            <img
-              alt="Tailwind CSS chat bubble component"
-              src="https://img.daisyui.com/images/profile/demo/anakeen@192.webp"
-            />
-          </div>
-        </div>
-        <div className="chat-header">
-        
-          <time className="text-xs opacity-50">12:46</time>
-        </div>
-        <div className="chat-bubble">{message?.message}</div>
-        <div className="chat-footer opacity-50">Seen at 12:46</div>
+      <div className="chat-header">
+        {!isSender && <span>{selectedUser?.fullName}</span>}
+        <time className="text-xs opacity-50">12:46</time>
       </div>
-    </>
+      <div className="chat-bubble">{message?.message}</div>
+    </div>
   );
 };
 

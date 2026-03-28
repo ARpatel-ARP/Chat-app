@@ -72,7 +72,7 @@ export const login = async (req, res) => {
                 _id:user._id,
                 userName:user.userName,
                 fullName:user.fullName,
-                profilePhoto:user.profile
+                profilePhoto:user.profilePhoto
             });
 
 
