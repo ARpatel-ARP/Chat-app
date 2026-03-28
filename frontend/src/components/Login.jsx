@@ -1,39 +1,42 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import axios from "axios"
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setAuthUser } from "../redux/userSlice";
 
 const Login = () => {
-  const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const [user, setUser] = useState({
-        userName:"",
-        password:"",
-    })
-    const submitHandler = async (e) => {
-      e.preventDefault()
-      try {
-              const res = await axios.post(`http://localhost:8000/api/v1/user/login`, user, {
-                  headers: {
-                      "Content-Type": 'application/json'
-                  },
-                  withCredentials:true
-              })
-            if (res.data.success) {
-                toast.success(res.data.message)
-                setUser({
-                  userName:"",
-                  password:"",
-                })
-              navigate("/")
-              dispatch(setAuthUser(res.data))
-            }
-           } catch (error) {
-              toast.error(error.response.data.message)
-              }
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [user, setUser] = useState({
+    userName: "",
+    password: "",
+  });
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        `http://localhost:8000/api/v1/user/login`,
+        user,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        },
+      );
+      console.log("Full response:", res.data);
+      if (res.data) {
+        dispatch(setAuthUser(res.data));
+        toast.success("Login successful!");
+        setUser({ userName: "", password: "" });
+        navigate("/");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+      toast.error(error?.response?.data?.message || "Login failed");
     }
+  };
   return (
     <div className="min-w-96 mx-auto">
       <div className="h-full p-4 w-full rounded-2xl bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border-[0.5px] border-gray-400">
@@ -46,9 +49,8 @@ const Login = () => {
               <span className="  label-text ">User Name</span>
             </label>
             <input
-            value={user.userName}
-            onChange={(e) => setUser({...user, userName:e.target.value})
-            }
+              value={user.userName}
+              onChange={(e) => setUser({ ...user, userName: e.target.value })}
               className="bg-gray-800 rounded-xl w-full input-bordered h-7 p-4"
               type="text"
               placeholder="Enter User Name"
@@ -59,9 +61,8 @@ const Login = () => {
               <span className="  label-text ">Password</span>
             </label>
             <input
-            value={user.password}
-            onChange={(e) =>setUser({...user, password:e.target.value})
-            }
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
               className="bg-gray-800 rounded-xl w-full input-bordered h-7 p-4"
               type="password"
               placeholder="Enter Password"
@@ -71,7 +72,13 @@ const Login = () => {
             New to Application ? Sign up here
           </Link>
           <div>
-           <button type="submit" className="bg-gradient-to-r from-gray-400 to-gray-900 hover:from-amber-600 hover:via-orange-400 hover:to-amber-600 transition-all duration-500 w-90 ml-4 cursor-pointer mt-4 text-amber-300 hover:text-black px-3 py-2 text-center rounded font-medium border border-amber-600 hover:border-amber-300 shadow-lg shadow-amber-900/50 hover:shadow-amber-500/50">Login</button></div>
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-gray-400 to-gray-900 hover:from-amber-600 hover:via-orange-400 hover:to-amber-600 transition-all duration-500 w-90 ml-4 cursor-pointer mt-4 text-amber-300 hover:text-black px-3 py-2 text-center rounded font-medium border border-amber-600 hover:border-amber-300 shadow-lg shadow-amber-900/50 hover:shadow-amber-500/50"
+            >
+              Login
+            </button>
+          </div>
         </form>
       </div>
     </div>
